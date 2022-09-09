@@ -33,9 +33,26 @@ import { FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { PermissionedRoute } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
+import { ThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import LightIcon from '@material-ui/icons/WbSunny';
+import { twTheme } from '../src/themes/twTheme';
+import { HomePage } from "../src/components/home/Home";
+import { HomepageCompositionRoot } from '@backstage/plugin-home';
 
 const app = createApp({
   apis,
+  themes: [{
+    id: 'my-theme',
+    title: 'My Custom Theme',
+    variant: 'light',
+    icon: <LightIcon />,
+    Provider: ({ children }) => (
+      <ThemeProvider theme={twTheme}>
+        <CssBaseline>{children}</CssBaseline>
+      </ThemeProvider>
+    ),
+  }],
   bindRoutes({ bind }) {
     bind(catalogPlugin.externalRoutes, {
       createComponent: scaffolderPlugin.routes.root,
@@ -58,7 +75,9 @@ const AppRouter = app.getRouter();
 
 const routes = (
   <FlatRoutes>
-    <Navigate key="/" to="catalog" />
+   <Route path="/" element={<HomepageCompositionRoot />}>
+     <HomePage />
+   </Route>
     <Route path="/catalog" element={<CatalogIndexPage />} />
     <Route
       path="/catalog/:namespace/:kind/:name"
