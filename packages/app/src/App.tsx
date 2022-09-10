@@ -39,6 +39,9 @@ import LightIcon from '@material-ui/icons/WbSunny';
 import { twTheme } from '../src/themes/twTheme';
 import { HomePage } from "../src/components/home/Home";
 import { HomepageCompositionRoot } from '@backstage/plugin-home';
+import { githubAuthApiRef } from '@backstage/core-plugin-api';
+import { SignInPage } from '@backstage/core-components';
+import { RamyaPage } from '@internal/plugin-ramya';
 
 const app = createApp({
   apis,
@@ -53,6 +56,20 @@ const app = createApp({
       </ThemeProvider>
     ),
   }],
+  components: {
+    SignInPage: props => (
+      <SignInPage 
+        {...props}
+        auto
+        provider={{
+          id: 'github-auth-provider',
+          title: 'GitHub',
+          message: 'Sign in using Github',
+          apiRef: githubAuthApiRef,
+        }}
+      />
+    )
+  },
   bindRoutes({ bind }) {
     bind(catalogPlugin.externalRoutes, {
       createComponent: scaffolderPlugin.routes.root,
@@ -110,6 +127,7 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
+    <Route path="/ramya" element={<RamyaPage />}/>
   </FlatRoutes>
 );
 

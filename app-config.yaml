@@ -62,7 +62,7 @@ proxy:
 techdocs:
   builder: 'local' # Alternatives - 'external'
   generator:
-    runIn: 'docker' # Alternatives - 'local'
+    runIn: 'local' # Alternatives - 'local'
   publisher:
     type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
@@ -90,9 +90,21 @@ catalog:
       rules:
         - allow: [Template]
 
+    # Local example template
+    - type: file
+      target: ../../../backstage-templates/springboot-kotlin/template.yaml
+      rules:
+        - allow: [Template]
+
+
     # Local example organizational data
     - type: file
       target: ../../examples/org.yaml
+      rules:
+        - allow: [User, Group]
+        
+    - type: url
+      target:  https://github.com/Ramya-Balu/Backstage_Workshop/blob/main/thoughtworks/org.yaml
       rules:
         - allow: [User, Group]
 
